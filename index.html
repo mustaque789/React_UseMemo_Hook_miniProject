@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React Memo Example</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: yellow;
+        }
+        section {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            font-size: 2.4rem;
+        }
+        button {
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6.26.0/babel.min.js"></script>
+    <script type="text/babel">
+        const { useState, useMemo } = React;
+
+        const MemoHook = () => {
+          const [myNum, setMyNum] = useState(0);
+          const [show, setShow] = useState(false);
+
+          const getValue = () => {
+            return setMyNum(myNum + 1);
+          };
+
+          const countNumber = (num) => {
+            // Simulating a time-consuming operation
+            for (let i = 0; i <= 1000000000; i++) {}
+            return num;
+          };
+
+          const CheckData = useMemo(() => {
+            return countNumber(myNum);
+          }, [myNum]);
+
+          return (
+            <section>
+              <button onClick={getValue} style={{ backgroundColor: "red" }}>
+                Counter
+              </button>
+              <p> My new number: {CheckData} </p>
+              <button onClick={() => setShow(!show)}>
+                {show ? "You clicked me" : "Click me, please"}
+              </button>
+            </section>
+          );
+        };
+
+        ReactDOM.render(<MemoHook />, document.getElementById("root"));
+    </script>
+</body>
+</html>
